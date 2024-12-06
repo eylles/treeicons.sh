@@ -206,16 +206,22 @@ show_usage () {
 show_help () {
   printf '%s\n'   "${myname}: tree now with icons"
   show_usage
-  printf '\n%s\n' "Options:"
-  printf '%s\n'   "-l N"
+  printf '%s\n' "Options:"
+  printf '\t%s'   "-l N"
   printf '\t%s\n' "where 'N' is the line height of the display area."
-  printf '\t%s\n' "if not provided tput cols will be used to determine the display area"
-  printf '\t%s\n' "when called from fzf the \$FZF_PREVIEW_LINES variable is used instead."
-  printf '%s\n'   "-h"
+  printf '\t\t%s\n' "if not provided tput cols will be used to determine the display area"
+  printf '\t\t%s\n' "when called from fzf the \$FZF_PREVIEW_LINES variable is used instead."
+  printf '\t%s'   "-a"
+  printf '\t%s\n' "show all files (shows hidden files)"
+  printf '\t%s'   "-f"
+  printf '\t%s\n' "show files first"
+  printf '\t%s'   "-h"
   printf '\t%s\n' "show this message"
 }
 
-while getopts "l:h" opt; do case "${opt}" in
+flags=""
+
+while getopts "l:haf" opt; do case "${opt}" in
     l)
         if is_num "$OPTARG"; then
             lines=$OPTARG
@@ -225,6 +231,8 @@ while getopts "l:h" opt; do case "${opt}" in
         fi
     ;;
     h) show_help ; exit 0 ;;
+    a) flags="${flags} -a" ;;
+    f) flags="${flags} --filesfirst";;
     *)
         printf '%s: invalid option %s\n' "${myname}" "$opt" >&2
         show_usage
@@ -234,8 +242,8 @@ esac done
 shift $(( OPTIND -1 ))
 
 if [ "$#" -gt "0" ]; then
-    tree -CFa --filesfirst "$@" | head -n "$lines" | add_icon
+    tree -CF ${flags} --filelimit "$lines" "$@" | head -n "$lines" | add_icon
 else
-    tree -CFa --filesfirst "$PWD" | head -n "$lines" | add_icon
+    tree -CF ${flags} --filelimit "$lines" "$PWD" | head -n "$lines" | add_icon
 fi
 

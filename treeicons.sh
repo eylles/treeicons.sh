@@ -2,12 +2,20 @@
 
 myname=${0##*/}
 
-# if ran as a preview for fzf use the fzf previe lines
+# if ran as a preview for fzf use the fzf preview lines
 if [ -z "$FZF_PREVIEW_LINES" ] ; then
     lines=$(tput lines)
     lines=$(( lines -2 ))
 else
     lines=$FZF_PREVIEW_LINES
+fi
+
+# if ran as a preview for fzf use the fzf preview columns
+if [ -z "$FZF_PREVIEW_COLUMNS" ] ; then
+    columns=$(tput cols)
+    columns=$(( columns -1 ))
+else
+    columns=$FZF_PREVIEW_COLUMNS
 fi
 
 get_icon () {
@@ -218,8 +226,12 @@ show_help () {
   printf '%s\n' "Options:"
   printf '\t%s'   "-l N"
   printf '\t%s\n' "where 'N' is the line height of the display area."
-  printf '\t\t%s\n' "if not provided tput cols will be used to determine the display area"
+  printf '\t\t%s\n' "if not provided tput lines will be used to determine the display area"
   printf '\t\t%s\n' "when called from fzf the \$FZF_PREVIEW_LINES variable is used instead."
+  printf '\t%s'   "-c N"
+  printf '\t%s\n' "where 'N' is the column width of the display area."
+  printf '\t\t%s\n' "if not provided tput cols will be used to determine the display area"
+  printf '\t\t%s\n' "when called from fzf the \$FZF_PREVIEW_COLUMNS variable is used instead."
   printf '\t%s'   "-a"
   printf '\t%s\n' "show all files (shows hidden files)"
   printf '\t%s'   "-f"
@@ -230,10 +242,18 @@ show_help () {
 
 flags=""
 
-while getopts "l:haf" opt; do case "${opt}" in
+while getopts "l:c:haf" opt; do case "${opt}" in
     l)
         if is_num "$OPTARG"; then
             lines=$OPTARG
+        else
+            printf '%s: argument for -%s "%s" is not a number\n' "${myname}" "$opt" "$OPTARG" >&2
+            exit 1
+        fi
+    ;;
+    c)
+        if is_num "$OPTARG"; then
+            columns=$OPTARG
         else
             printf '%s: argument for -%s "%s" is not a number\n' "${myname}" "$opt" "$OPTARG" >&2
             exit 1
@@ -251,7 +271,7 @@ esac done
 shift $(( OPTIND -1 ))
 
 show_tree () {
-    tree -CF ${flags} "$@" | head -n "$lines" | add_icon
+    tree -CF ${flags} "$@" | head -n "$lines" | add_icon | colrm "$columns"
 }
 
 if [ "$#" -gt "0" ]; then

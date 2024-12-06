@@ -217,32 +217,35 @@ is_num() {
 }
 
 show_usage () {
-    printf 'usage: %s [-lh] [DIRECTORY]\n' "${myname}"
+    printf 'usage: %s [-afCh] [-l LINES] [-c COLS] [DIRECTORY]\n' "${myname}"
 }
 
 show_help () {
   printf '%s\n'   "${myname}: tree now with icons"
   show_usage
   printf '%s\n' "Options:"
-  printf '\t%s'   "-l N"
-  printf '\t%s\n' "where 'N' is the line height of the display area."
+  printf '\t%s'   "-l Num"
+  printf '\t%s\n' "where 'Num' is the line height of the display area."
   printf '\t\t%s\n' "if not provided tput lines will be used to determine the display area"
   printf '\t\t%s\n' "when called from fzf the \$FZF_PREVIEW_LINES variable is used instead."
-  printf '\t%s'   "-c N"
-  printf '\t%s\n' "where 'N' is the column width of the display area."
+  printf '\t%s'   "-c Num"
+  printf '\t%s\n' "where 'Num' is the column width of the display area."
   printf '\t\t%s\n' "if not provided tput cols will be used to determine the display area"
   printf '\t\t%s\n' "when called from fzf the \$FZF_PREVIEW_COLUMNS variable is used instead."
   printf '\t%s'   "-a"
   printf '\t%s\n' "show all files (shows hidden files)"
   printf '\t%s'   "-f"
   printf '\t%s\n' "show files first"
+  printf '\t%s'   "-C"
+  printf '\t%s\n' "do not constrain output width, this makes '-c' useless"
   printf '\t%s'   "-h"
   printf '\t%s\n' "show this message"
 }
 
 flags=""
+noconstrain=""
 
-while getopts "l:c:haf" opt; do case "${opt}" in
+while getopts "l:c:afhC" opt; do case "${opt}" in
     l)
         if is_num "$OPTARG"; then
             lines=$OPTARG
@@ -260,6 +263,7 @@ while getopts "l:c:haf" opt; do case "${opt}" in
         fi
     ;;
     h) show_help ; exit 0 ;;
+    C) noconstrain=1 ;;
     a) flags="${flags} -a" ;;
     f) flags="${flags} --filesfirst";;
     *)
@@ -271,7 +275,11 @@ esac done
 shift $(( OPTIND -1 ))
 
 show_tree () {
-    tree -CF ${flags} "$@" | head -n "$lines" | add_icon | colrm "$columns"
+    if [ -z "$noconstrain" ]; then
+        tree -CF ${flags} "$@" | head -n "$lines" | add_icon | colrm "$columns"
+    else
+        tree -CF ${flags} "$@" | head -n "$lines" | add_icon
+    fi
 }
 
 if [ "$#" -gt "0" ]; then

@@ -141,7 +141,7 @@ get_icon () {
         *"mp4"*|*"mkv"*|*"webm"*|*"flv"*|*"mov"*)
             icon=""
             ;;
-        *"mk"*|*"makefile"*)
+        *'mk'|*"makefile")
             icon=""
             ;;
         *"mp3"*|*"m2a"*|*"m4a"*|*"ogg"*|*"wma"*|*"wav"*|*"aac"*|*"flac"*|*"midi"*)
@@ -150,13 +150,13 @@ get_icon () {
         *'git'*'/')
             icon=""
             ;;
-        **'/')
+        *'/')
             icon=""
             ;;
         *'*')
             icon=""
             ;;
-        *"rc"*|*"ini"*|*"conf"*|*"profile"*)
+        *"rc"*|*"ini"|*"conf"|*"profile"*)
             icon=""
             ;;
         *"vim"*|*"vifm"*)

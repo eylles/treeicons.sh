@@ -233,4 +233,9 @@ while getopts "l:h" opt; do case "${opt}" in
 esac done
 shift $(( OPTIND -1 ))
 
-tree -CFa --filesfirst "$1" | head -n "$lines" | add_icon
+if [ "$#" -gt "0" ]; then
+    tree -CFa --filesfirst "$@" | head -n "$lines" | add_icon
+else
+    tree -CFa --filesfirst "$PWD" | head -n "$lines" | add_icon
+fi
+

@@ -11,13 +11,9 @@ else
 fi
 
 get_icon () {
-    icon=""
     ext=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
     # echo "-$ext-"
     case "$ext" in
-        *"zsh"*|*"ksh"*|*"bash"*|*"fish"*|*"sh"*)
-            icon=""
-            ;;
         is|init|sysd|service)
             icon=""
             ;;
@@ -54,7 +50,7 @@ get_icon () {
         gitignore)
             icon=""
             ;;
-        license|copying)
+        *"license"*|*"copying"*)
             icon=""
             ;;
         eula)
@@ -84,7 +80,7 @@ get_icon () {
         lua)
             icon=""
             ;;
-        md|rmd)
+        "md"*|rmd)
             icon=""
             ;;
         json)
@@ -141,9 +137,6 @@ get_icon () {
         *"mp4"*|*"mkv"*|*"webm"*|*"flv"*|*"mov"*)
             icon=""
             ;;
-        *'mk'|*"makefile")
-            icon=""
-            ;;
         *"mp3"*|*"m2a"*|*"m4a"*|*"ogg"*|*"wma"*|*"wav"*|*"aac"*|*"flac"*|*"midi"*)
             icon=""
             ;;
@@ -152,6 +145,15 @@ get_icon () {
             ;;
         *'/')
             icon=""
+            ;;
+        *"makefile"*)
+            icon=""
+            ;;
+        *"mk"*)
+            icon=""
+            ;;
+        *"zsh"*|*"ksh"*|*"bash"*|*"fish"*|*"sh"*)
+            icon=""
             ;;
         *'*')
             icon=""
@@ -164,6 +166,9 @@ get_icon () {
             ;;
         *"log"*)
             icon=""
+            ;;
+        *)
+            icon=""
             ;;
     esac
     printf '%s' "$icon"

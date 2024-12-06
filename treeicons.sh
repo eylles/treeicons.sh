@@ -180,16 +180,20 @@ add_icon() {
         if [ "${REPLY}" = '' ]; then
             num=-1
         fi
-        if [ "$num" -gt "0" ]; then
-            prefix="${REPLY%%─ *}─"
+        if [ "$num" -ge "0" ]; then
+            prefix="${REPLY%%─ *}"
+            # echo "$prefix"
             filename="${REPLY##*─ }"
-            extension="${filename##*.}"
-            icon=$(get_icon "$extension")
-            printf '%s %s %s\n' "$prefix" "$icon" "${filename}"
-        else
-            if [ "$num" -eq "0" ]; then
+            if [ "$prefix" = "$filename" ]; then
                 printf '┌  [%s]\n' "${REPLY%/*}"
             else
+                extension="${filename##*.}"
+                icon=$(get_icon "$extension")
+                prefix="${prefix}─"
+                printf '%s %s %s\n' "$prefix" "$icon" "${filename}"
+            fi
+        else
+            if [ "$num" -lt "0" ]; then
                 printf '%s\n' "${REPLY%/*}"
             fi
         fi

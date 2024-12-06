@@ -200,7 +200,7 @@ is_num() {
 }
 
 show_usage () {
-    printf 'usage: %s [-lh] [FILE]\n' "${myname}"
+    printf 'usage: %s [-lh] [DIRECTORY]\n' "${myname}"
 }
 
 show_help () {

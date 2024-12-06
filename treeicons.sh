@@ -241,9 +241,13 @@ while getopts "l:haf" opt; do case "${opt}" in
 esac done
 shift $(( OPTIND -1 ))
 
-if [ "$#" -gt "0" ]; then
+show_tree () {
     tree -CF ${flags} --filelimit "$lines" "$@" | head -n "$lines" | add_icon
+}
+
+if [ "$#" -gt "0" ]; then
+    show_tree "$@"
 else
-    tree -CF ${flags} --filelimit "$lines" "$PWD" | head -n "$lines" | add_icon
+    show_tree "$PWD"
 fi
 

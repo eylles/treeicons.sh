@@ -242,7 +242,7 @@ esac done
 shift $(( OPTIND -1 ))
 
 show_tree () {
-    tree -CF ${flags} --filelimit "$lines" "$@" | head -n "$lines" | add_icon
+    tree -CF ${flags} "$@" | head -n "$lines" | add_icon
 }
 
 if [ "$#" -gt "0" ]; then

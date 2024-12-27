@@ -238,6 +238,8 @@ show_help () {
   printf '\t%s\n' "show files first"
   printf '\t%s'   "-C"
   printf '\t%s\n' "do not constrain output width, this makes '-c' useless"
+  printf '\t%s'   "-L"
+  printf '\t%s\n' "do not constrain output height, this makes '-l' useless"
   printf '\t%s'   "-h"
   printf '\t%s\n' "show this message"
 }
@@ -245,7 +247,7 @@ show_help () {
 flags=""
 noconstrain=""
 
-while getopts "l:c:afhC" opt; do case "${opt}" in
+while getopts "l:c:afhCL" opt; do case "${opt}" in
     l)
         if is_num "$OPTARG"; then
             lines=$OPTARG
@@ -263,7 +265,8 @@ while getopts "l:c:afhC" opt; do case "${opt}" in
         fi
     ;;
     h) show_help ; exit 0 ;;
-    C) noconstrain=1 ;;
+    C) noconstrain="${noconstrain}cols" ;;
+    L) noconstrain="${noconstrain}rows" ;;
     a) flags="${flags} -a" ;;
     f) flags="${flags} --filesfirst";;
     *)
@@ -275,11 +278,20 @@ esac done
 shift $(( OPTIND -1 ))
 
 show_tree () {
-    if [ -z "$noconstrain" ]; then
-        tree -CF ${flags} "$@" | head -n "$lines" | add_icon | colrm "$columns"
-    else
-        tree -CF ${flags} "$@" | head -n "$lines" | add_icon
-    fi
+    case "$noconstrain" in
+        rows)
+            tree -CF ${flags} "$@" | add_icon | colrm "$columns"
+            ;;
+        cols)
+            tree -CF ${flags} "$@" | head -n "$lines" | add_icon
+            ;;
+        rowscols|colsrows)
+            tree -CF ${flags} "$@" | add_icon
+            ;;
+        *)
+            tree -CF ${flags} "$@" | head -n "$lines" | add_icon | colrm "$columns"
+            ;;
+    esac
 }
 
 if [ "$#" -gt "0" ]; then

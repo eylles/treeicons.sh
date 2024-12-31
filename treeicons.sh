@@ -246,6 +246,9 @@ show_help () {
 
 flags=""
 noconstrain=""
+if [ -n "$NO_CONSTRAIN_TREEICONS" ] ; then
+    noconstrain="$NO_CONSTRAIN_TREEICONS"
+fi
 
 while getopts "l:c:afhCL" opt; do case "${opt}" in
     l)

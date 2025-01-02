@@ -139,7 +139,7 @@ get_icon () {
         *"scss"*|*"css"*)
             icon=""
             ;;
-        *"7z"*|*"zip"*|*"rar"*|*"deb"*|*"xz"*)
+        *"7z"*|*"zip"*|*"rar"*|*"deb"*|*"xz"*|*"jar"*|*"gz"*|*"tar"*)
             icon=""
             ;;
         *"mp4"*|*"mkv"*|*"webm"*|*"flv"*|*"mov"*)

@@ -113,16 +113,16 @@ get_icon () {
             icon=""
             ;;
         doc|docx)
-            icon=""
+            icon="󰈬"
             ;;
         xls|xls[mx])
-            icon=""
+            icon="󰈛"
             ;;
         ppt|pptx)
-            icon=""
+            icon="󰈧"
             ;;
         *"pdf"*)
-            icon=""
+            icon=""
             ;;
         exe|msi|dll)
             icon=""
@@ -131,10 +131,10 @@ get_icon () {
             icon=""
             ;;
         htm|htmx|html|xml)
-            icon=""
+            icon="󰈮"
             ;;
         *"png"*|*"jpg"*|*"jpeg"*|*"webp"*|*"gif"*|*"svg"*|*"ico"*)
-            icon=""
+            icon="󰋩"
             ;;
         *"scss"*|*"css"*)
             icon=""
@@ -161,7 +161,7 @@ get_icon () {
             icon=""
             ;;
         *"zsh"*|*"ksh"*|*"bash"*|*"fish"*|*"sh"*)
-            icon=""
+            icon=""
             ;;
         *'*')
             icon=""
